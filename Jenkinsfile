@@ -14,19 +14,17 @@ pipeline {
             }
         }
         }
-        stage('Build') {
-            steps {
-                echo 'Build'
-                sh "ls"
-            }
-        }
+      
         stage('Deployment') {
             steps {
                 echo 'Deployment'
-                sh "ls"
+                withCredentials([file(credentialsId: 'secret_file_test', variable: 'kubeconfig-iti')]) {
+                sh """
+                           kubectl apply -f Deployment --kubeconfig ${kubeconfig-iti}
+                """
             }
         }
-            
+        }       
     }
     
 }
