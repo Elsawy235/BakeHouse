@@ -20,7 +20,9 @@ pipeline {
                 echo 'Deployment'
                 withCredentials([file(credentialsId: 'secret_file_test', variable: 'kubeconfig-iti')]) {
                 sh """
-                           kubectl apply -f Deployment --kubeconfig ${kubeconfig-iti}
+                           kubectl apply -f Deployment/service.yaml --kubeconfig ${kubeconfig-iti}
+                           kubectl apply -f Deployment/deploy.yaml --kubeconfig ${kubeconfig-iti}
+                           
                 """
             }
         }
