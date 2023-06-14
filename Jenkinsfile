@@ -18,10 +18,10 @@ pipeline {
         stage('Deployment') {
             steps {
                 echo 'Deployment'
-                withCredentials([file(credentialsId: 'secret_file_test', variable: 'kubeconfig-iti')]) {
+                withCredentials([file(credentialsId: 'secret_file_test', variable: 'test')]) {
                 sh """
-                           kubectl apply -f Deployment/service.yaml --kubeconfig ${kubeconfig-iti}
-                           kubectl apply -f Deployment/deploy.yaml --kubeconfig ${kubeconfig-iti}
+                           kubectl apply -f Deployment/service.yaml --kubeconfig ${test}
+                           kubectl apply -f Deployment/deploy.yaml --kubeconfig ${test}
                            
                 """
             }
