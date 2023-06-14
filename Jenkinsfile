@@ -8,8 +8,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'iti-sys-admin-mnf-docker-cred', usernameVariable:'username' ,passwordVariable:'password')]) {    // Use the file within the block    echo "File path: ${MY_FILE}"
                 sh """
                 docker login -u ${username} -p ${password}
-                docker build -t mahmoudelsawy2023/testng:v${BUILD_NUMBER} .
-                docker push mahmoudelsawy2023/testing:v1
+                docker build -t mahmoudelsawy2023/mahmoud:v${BUILD_NUMBER} .
+                docker push mahmoudelsawy2023/mahmoud:v1
                     """
             }
         }
