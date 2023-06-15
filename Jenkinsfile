@@ -34,6 +34,7 @@ pipeline {
                     if (params.ENV_ITI== "dev" || params.ENV_ITI== "prod" || params.ENV_ITI== "test"){
                         withCredentials([file(credentialsId: 'secret_file_test', variable: 'test')]) {
                         sh """
+                           export BUILD_NUMBER=$(cat ../build_num.txt)
                            mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
                            cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
                            rm -rf Deployment/deploy.yaml.tmp
