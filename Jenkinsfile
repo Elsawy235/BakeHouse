@@ -1,16 +1,28 @@
 pipeline {
     agent {label "first-slave"}
+    parameters {
+    choice(name: 'ENV_ITI', choices: ['dev','test','prod','release'])
+    }
 
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello World'
-                withCredentials([usernamePassword(credentialsId: 'iti-sys-admin-mnf-docker-cred', usernameVariable:'username' ,passwordVariable:'password')]) {    // Use the file within the block    echo "File path: ${MY_FILE}"
-                sh """
-                docker login -u ${username} -p ${password}
-                docker build -t mahmoudelsawy2023/testing:v${BUILD_NUMBER} .
-                docker push mahmoudelsawy2023/testing:v${BUILD_NUMBER}
-                    """
+                script{ 
+                    echo 'Build'
+                    if (params.ENV_ITI=="release"){
+                        withCredentials([usernamePassword(credentialsId: 'iti-sys-admin-mnf-docker-cred', usernameVariable:'username' ,passwordVariable:'password')]) {    // Use the file within the block    echo "File path: ${MY_FILE}"
+                        sh '''
+                        docker login -u ${username} -p ${password}
+                        docker build -t mahmoudelsawy2023/testing:v${BUILD_NUMBER} .
+                        docker push mahmoudelsawy2023/testing:v${BUILD_NUMBER}
+                        echo ${BUILD_NUMBER} > ../build_num.txt
+                        echo ${ENV_ITI}
+                            '''
+                        }
+                    }
+                    else{
+                        echo "user chose ${params.ENV_ITI}"
+                    }
             }
         }
         }
@@ -18,16 +30,26 @@ pipeline {
         stage('Deployment') {
             steps {
                 echo 'Deployment'
-                withCredentials([file(credentialsId: 'secret_file_test', variable: 'test')]) {
-                sh """
+                script{
+                    if (params.ENV_ITI== "dev" || params.ENV_ITI== "prod" || params.ENV_ITI== "test"){
+                        withCredentials([file(credentialsId: 'secret_file_test', variable: 'test')]) {
+                        sh """
                            mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
                            cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
                            rm -rf Deployment/deploy.yaml.tmp
                            kubectl apply -f Deployment/service.yaml --kubeconfig ${test}
                            kubectl apply -f Deployment/deploy.yaml --kubeconfig ${test}
                            
-                """
-            }
+                            """
+                             }
+                    
+                    }
+                    else{
+                         echo "user chose ${params.ENV_ITI}"
+                    }
+                    
+                }
+                
         }
         }       
     }
