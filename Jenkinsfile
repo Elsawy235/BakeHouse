@@ -37,8 +37,8 @@ pipeline {
                            mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
                            cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
                            rm -rf Deployment/deploy.yaml.tmp
-                           kubectl apply -f Deployment/service.yaml --kubeconfig ${test}
-                           kubectl apply -f Deployment/deploy.yaml --kubeconfig ${test}
+                           kubectl apply -f Deployment/service.yaml --kubeconfig ${test} -n ${ENV_ITI}
+                           kubectl apply -f Deployment/deploy.yaml --kubeconfig ${test} -n ${ENV_ITI}
                            
                             """
                              }
