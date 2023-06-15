@@ -33,7 +33,7 @@ pipeline {
                 script{
                     if (params.ENV_ITI== "dev" || params.ENV_ITI== "prod" || params.ENV_ITI== "test"){
                         withCredentials([file(credentialsId: 'secret_file_test', variable: 'test')]) {
-                        sh """
+                        sh '''
                            export BUILD_NUMBER=$(cat ../build_num.txt)
                            mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
                            cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
@@ -41,7 +41,7 @@ pipeline {
                            kubectl apply -f Deployment/service.yaml --kubeconfig ${test} -n ${ENV_ITI}
                            kubectl apply -f Deployment/deploy.yaml --kubeconfig ${test} -n ${ENV_ITI}
                            
-                            """
+                            '''
                              }
                     
                     }
