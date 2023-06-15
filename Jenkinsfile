@@ -10,11 +10,11 @@ pipeline {
                 script{ 
                     echo 'Build'
                     if (params.ENV_ITI=="release"){
-                        withCredentials([usernamePassword(credentialsId: 'mostafa-cred', usernameVariable:'username' ,passwordVariable:'password')]) {    // Use the file within the block    echo "File path: ${MY_FILE}"
+                        withCredentials([usernamePassword(credentialsId: 'iti-sys-admin-mnf-docker-cred', usernameVariable:'username' ,passwordVariable:'password')]) {    // Use the file within the block    echo "File path: ${MY_FILE}"
                         sh '''
                         docker login -u ${username} -p ${password}
-                        docker build -t mostafaelsharkawy74/tt:v${BUILD_NUMBER} .
-                        docker push mostafaelsharkawy74/tt:v${BUILD_NUMBER}
+                        docker build -t mahmoudelsawy2023/testing:v${BUILD_NUMBER} .
+                        docker push mahmoudelsawy2023/testing:v${BUILD_NUMBER}
                         echo ${BUILD_NUMBER} > ../build_num.txt
                         echo ${ENV_ITI}
                             '''
