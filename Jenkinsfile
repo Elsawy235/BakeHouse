@@ -1,6 +1,24 @@
 pipeline {
-    agent {label "first-slave"}
-    parameters {
+    agent {label "node-slave"}
+      stages{
+          stage('build'){
+              steps {
+                  script {
+                      echo "build"
+                      def dockerHubCreds = credentials('dockerhub_credential')
+                      sh """
+                  docker login -u ${dockerHubCreds.USERNAME} --password-stdin"
+                  docker build -t kareemelkasaby/bakehouseitisysadmin:v1 .
+                  docker push kareemelkasaby/bakehouseitisysadmin:v1
+                  
+                  """
+                  }
+                  
+                  
+              }
+      }
+      }
+   /* parameters {
     choice(name: 'ENV_ITI', choices: ['dev','test','prod','release'])
     }
 
@@ -56,3 +74,4 @@ pipeline {
     }
     
 }
+*/
