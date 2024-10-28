@@ -3,7 +3,7 @@ pipeline {
       stages{
           stage('build'){
               steps {
-                  script {
+                  script{
                       echo "build"
                       def dockerHubCreds = credentials('dockerhub_credential')
                       sh """
@@ -12,9 +12,7 @@ pipeline {
                   docker push kareemelkasaby/bakehouseitisysadmin:v1
                   
                   """
-                  }
-                  
-                  
+              }
               }
       }
       }
