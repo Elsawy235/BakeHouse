@@ -7,7 +7,7 @@ pipeline {
                       echo "build"
                       def dockerHubCreds = credentials('dockerhub_credential')
                       sh """
-                  docker login -u ${dockerHubCreds.USERNAME} --password-stdin"
+                  echo ${dockerHubCreds.PASSWORD} | docker login -u ${dockerHubCreds.USERNAME} --password-stdin
                   docker build -t kareemelkasaby/bakehouseitisysadmin:v1 .
                   docker push kareemelkasaby/bakehouseitisysadmin:v1
                   
