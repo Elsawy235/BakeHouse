@@ -3,16 +3,16 @@ pipeline {
       stages{
           stage('build'){
               steps {
-                  script{
+                  
                       echo "build"
-                      def dockerHubCreds = credentials('dockerhub_credential')
+                  withCredentials([usernamePassword(credentialsId: 'dockerhub_credential', usernameVariable: 'USERNAME',passwordVariable: 'PASSWORD')]){
                       sh """
-                  echo ${dockerHubCreds.PASSWORD} | docker login -u ${dockerHubCreds.USERNAME} --password-stdin
+                  docker login -u ${USERNAME} -p ${PASSWORD}
                   docker build -t kareemelkasaby/bakehouseitisysadmin:v1 .
                   docker push kareemelkasaby/bakehouseitisysadmin:v1
                   
                   """
-              }
+                  }
               }
       }
       }
