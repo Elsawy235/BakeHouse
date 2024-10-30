@@ -6,16 +6,23 @@ pipeline {
                   
                       echo "build"
                   withCredentials([usernamePassword(credentialsId: 'dockerhub_credential', usernameVariable: 'USERNAME',passwordVariable: 'PASSWORD')]){
-                      sh """
+                      sh '''
                   docker login -u ${USERNAME} -p ${PASSWORD}
-                  docker build -t mahmoudelsawy2023/bakehouseitisysadmin:v1 .
-                  docker push mahmoudelsawy2023/bakehouseitisysadmin:v1
+                  docker build -t mahmoudelsawy2023/bakehouseitisysadmin:v${BUILD_NUMBER} .
+                  docker push mahmoudelsawy2023/bakehouseitisysadmin:v${BUILD_NUMBER}
                   
-                  """
+                  '''
                   }
               }
       }
+           stage('deploy'){
+              steps {
+                  echo "deploy"
+                  sh ' ls '
+                  }
+              }
       }
+        
 }
    /* parameters {
     choice(name: 'ENV_ITI', choices: ['dev','test','prod','release'])
